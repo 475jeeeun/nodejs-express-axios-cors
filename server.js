@@ -1,17 +1,46 @@
 // server.js
 
-const http = require('http');
+
+const express = require('express')
+const cors =require('cors')
+
+
 
 // CORS 설정을 위한 헤더
 const headers = {
-  'Access-Control-Allow-Origin': "http://127.0.0.1:9000",
+  'Access-Control-Allow-Origin': "http://127.0.0.1:5500",
   'Access-Control-Allow-Methods': 'OPTIONS, POST, GET, PUT, DELETE',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
 let data = { message: '여러분 화이팅!' };
 
-const server = http.createServer((req, res) => {
+
+const app = express()
+app.use(cors({
+  origin:"http://127.0.0.1:5500",
+  methods:['OPTIONS, POST, GET, PUT, DELETE']
+}))
+
+app.use(express.json())
+
+app.options('message', (req,res) =>{
+  return res.send('요청 보내세요')
+
+})
+
+app.get('/',(req,res) => {
+return res.json(todo) 
+})
+
+app.post('/',(req,res) => {
+  console.log(req.body)
+})
+
+
+
+
+/* const server = http.createServer((req, res) => {
   if (req.method === 'OPTIONS') {
     res.writeHead(204, headers);
     res.end();
@@ -55,7 +84,7 @@ const server = http.createServer((req, res) => {
     res.end('데이터가 삭제되었습니다.');
   }
 });
-
-server.listen(3000, () => {
+ */
+app.listen(3000, () => {
   console.log('서버가 http://localhost:3000/ 에서 실행 중입니다.');
 });
